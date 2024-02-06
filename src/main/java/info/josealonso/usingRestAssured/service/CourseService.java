@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -27,5 +28,12 @@ public class CourseService {
                                 .findFirst()
                                 .orElseThrow(() -> new CourseNotFoundException(code)
         );
+    }
+
+    public void addCourse(String code) {
+        var courseSetCopy = this.courseSet;
+        var oldCourseSet = this.courseSet;
+        courseSetCopy.add(new Course(code));
+        this.courseSet = courseSetCopy;
     }
 }
