@@ -16,6 +16,7 @@ import java.util.Collections;
 
 //import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static io.restassured.RestAssured.get;
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
@@ -46,7 +47,8 @@ public class CourseControllerUnitTest {
     @Test
     public void givenNoExistingCoursesWhenGetCoursesThenResponseWithStatusOkAndEmptyArray() {
 
-        get("/courses").then()
+        given().when()
+                .get("/courses").then()
                 .log().ifValidationFails()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)

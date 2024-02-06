@@ -1,6 +1,6 @@
 package info.josealonso.usingRestAssured.controller;
 
-import info.josealonso.usingRestAssured.Course;
+import info.josealonso.usingRestAssured.model.Course;
 import info.josealonso.usingRestAssured.service.CourseService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
