@@ -14,9 +14,8 @@ import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
-
-//import static io.restassured.module.mockmvc.RestAssuredMockMvc.when;
 
 public class CourseControllerUnitTest {
 
@@ -32,17 +31,41 @@ public class CourseControllerUnitTest {
         RestAssuredMockMvc.standaloneSetup(courseController, courseControllerExceptionHandler);
     }
 
+    /*
+      REST-assured uses the familiar given-when-then scenario format to define the test:
+        given() - specifies the HTTP request details.
+        when() - specifies the HTTP verb as well as the route.
+        then() - validates the HTTP response.
+     */
+
     @Test
     public void givenNoExistingCoursesWhenGetCoursesThenResponseWithStatusOkAndEmptyArray() {
         when(courseService.getCourses()).thenReturn(Collections.emptyList());
 
         given()
-            .when()
+                .when()
                 .get("/courses")
-            .then()
+                .then()
                 .log().ifValidationFails()
                 .statusCode(OK.value())
                 .contentType(ContentType.JSON)
                 .body(is(equalTo("[]")));
     }
+
+    @Test
+    public void givenNoMatchingCoursesWhenGetCoursesThenResponseWithStatusNotFound() {
+        String nonMatchingCourseCode = "nonMatchingCourseCode";
+
+        when(courseService.getCourse(nonMatchingCourseCode)).thenThrow(
+                new CourseNotFoundException(nonMatchingCourseCode)
+        );
+
+        given()
+                .when()
+                .get("/courses" + nonMatchingCourseCode)
+                .then()
+                .log().ifValidationFails()
+                .statusCode(NOT_FOUND.value());
+    }
+
 }

@@ -14,7 +14,7 @@ class DemoApplicationTests {
 
 	@BeforeAll
 	public static void initialiseRestAssuredMockMvcStandalone() {
-		RestAssuredMockMvc.webAppContextSetup;
+//		RestAssuredMockMvc.webAppContextSetup;
 //		RestAssuredMockMvc.standaloneSetup(new TodosController());
 	}
 
