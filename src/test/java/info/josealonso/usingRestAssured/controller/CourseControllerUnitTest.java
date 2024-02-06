@@ -1,6 +1,5 @@
 package info.josealonso.usingRestAssured.controller;
 
-import info.josealonso.usingRestAssured.model.Course;
 import info.josealonso.usingRestAssured.service.CourseService;
 import io.restassured.module.webtestclient.RestAssuredWebTestClient.*;
 import io.restassured.module.webtestclient.matcher.RestAssuredWebTestClientMatchers.*;
@@ -22,7 +21,6 @@ import org.springframework.http.MediaType;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -38,6 +36,7 @@ public class CourseControllerUnitTest {
     @BeforeEach
     public void initialiseRestAssuredMockMvcStandalone() {
         RestAssuredMockMvc.standaloneSetup(courseController, courseControllerExceptionHandler);
+        courseService.clearSet();
     }
 
     /*
@@ -50,7 +49,8 @@ public class CourseControllerUnitTest {
     @Test
     public void givenNoExistingCoursesWhenGetCoursesThenResponseWithStatusOkAndEmptyArray() {
 
-        given().when()
+        given()
+                .when()
                 .get("/courses").then()
                 .log().ifValidationFails()
                 .statusCode(HttpStatus.OK.value())
@@ -68,11 +68,12 @@ public class CourseControllerUnitTest {
                 .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
-    public  String getJsonPath(Response response, String key) {
+    public  String getJsonPath(Response response, String key) {  // Not used
         var complete = response.asString();
         JsonPath js = new JsonPath(complete);
         return js.get(key).toString();
     }
+
     @Test
     public void givenANewCourseWhenAddCourseThenResponseWithStatusOkAndTheNewCourse() {
         String validCourseCode = "CourseCode";
