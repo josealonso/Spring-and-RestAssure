@@ -1,4 +1,3 @@
 package info.josealonso.usingRestAssured;
 
-public class TodosController {
-}
+public record Course (String code) {}
