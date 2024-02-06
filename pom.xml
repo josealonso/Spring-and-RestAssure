@@ -32,9 +32,21 @@
 			<version>3.3.0</version>
 			<scope>test</scope>
 		</dependency>
-<!--	Wagon Maven Plugin:
-    It allows you to upload resources from your build to a remote location using wagon.
-		-->
+
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>spring-web-test-client</artifactId>
+			<version>5.4.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.skyscreamer</groupId>
+			<artifactId>jsonassert</artifactId>
+		</dependency>
+		<!--	Wagon Maven Plugin:
+            It allows you to upload resources from your build to a remote location using wagon.
+                -->
 	</dependencies>
 
 	<build>
