@@ -1,5 +1,6 @@
 package info.josealonso.usingRestAssured;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,12 +17,12 @@ public class CourseController {
         this.courseService = courseService;
     }
 
-    @GetMapping(produces = APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Collection<Course> getCourses() {
         return courseService.getCourses();
     }
 
-    @GetMapping(path = "/{code}", produces = APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(path = "/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Course getCourse(@PathVariable String code) {
         return courseService.getCourse(code);
     }
