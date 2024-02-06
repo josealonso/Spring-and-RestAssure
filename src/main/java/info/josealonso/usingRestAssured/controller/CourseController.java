@@ -8,10 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.Collections;
 
 @RestController
-@RequestMapping(path = "/courses")
+@RequestMapping(value = "/courses")
 public class CourseController {
     private final CourseService courseService;
 
@@ -25,14 +24,15 @@ public class CourseController {
         return ResponseEntity.ok().body(courses);
     }
 
-    @GetMapping(path = "/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Course getCourse(@PathVariable String code) {
         return courseService.getCourse(code);
     }
 
-    @PostMapping(path = "/{code}")
+    @PostMapping(value = "/{code}",
+            produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public Course addCourse(@RequestBody String code) {
+    public Course addCourse(@RequestBody String code) {  // Not @RequestParam!!
         courseService.addCourse(code);
         return new Course(code);
     }

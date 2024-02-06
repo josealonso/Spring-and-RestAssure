@@ -1,8 +1,14 @@
 package info.josealonso.usingRestAssured.controller;
 
+import info.josealonso.usingRestAssured.model.Course;
 import info.josealonso.usingRestAssured.service.CourseService;
+import io.restassured.module.webtestclient.RestAssuredWebTestClient.*;
+import io.restassured.module.webtestclient.matcher.RestAssuredWebTestClientMatchers.*;
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import io.restassured.path.json.JsonPath;
+import io.restassured.response.Response;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -11,12 +17,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 
-import java.util.Collections;
-
-//import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
-import static io.restassured.RestAssured.get;
-import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
@@ -63,6 +66,31 @@ public class CourseControllerUnitTest {
                 .then()
                 .log().ifValidationFails()
                 .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    public  String getJsonPath(Response response, String key) {
+        var complete = response.asString();
+        JsonPath js = new JsonPath(complete);
+        return js.get(key).toString();
+    }
+    @Test
+    public void givenANewCourseWhenAddCourseThenResponseWithStatusOkAndTheNewCourse() {
+        String validCourseCode = "CourseCode";
+
+        Response response =
+        given().contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(validCourseCode)
+                .when()
+                .post("/courses/" + validCourseCode)
+                .then()
+                .log().ifValidationFails()
+                .statusCode(HttpStatus.CREATED.value())
+                .extract()
+                .response();
+        Assertions.assertEquals(response.path("code"), validCourseCode);     // IT WORKS!!
+
+        System.out.println("===============================");
+        System.out.println(response.asPrettyString());
     }
 
 }
