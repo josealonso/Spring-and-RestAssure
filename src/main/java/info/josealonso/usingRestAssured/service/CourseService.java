@@ -1,5 +1,7 @@
-package info.josealonso.usingRestAssured;
+package info.josealonso.usingRestAssured.service;
 
+import info.josealonso.usingRestAssured.Course;
+import info.josealonso.usingRestAssured.controller.CourseNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -16,11 +18,11 @@ public class CourseService {
         var Maths = new Course("Maths");
     }
 
-    Collection<Course> getCourses() {
+    public Collection<Course> getCourses() {
         return COURSE_MAP.values();
     }
 
-    Course getCourse(String code) {
+    public Course getCourse(String code) {
         return Optional.ofNullable(COURSE_MAP.get(code)).orElseThrow(
                 () -> new CourseNotFoundException(code)
         );

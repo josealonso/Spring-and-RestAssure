@@ -1,4 +1,4 @@
-package info.josealonso.usingRestAssured;
+package info.josealonso.usingRestAssured.controller;
 
 public class CourseNotFoundException extends RuntimeException {
 

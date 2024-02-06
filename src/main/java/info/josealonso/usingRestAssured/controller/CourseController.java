@@ -1,5 +1,7 @@
-package info.josealonso.usingRestAssured;
+package info.josealonso.usingRestAssured.controller;
 
+import info.josealonso.usingRestAssured.Course;
+import info.josealonso.usingRestAssured.service.CourseService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

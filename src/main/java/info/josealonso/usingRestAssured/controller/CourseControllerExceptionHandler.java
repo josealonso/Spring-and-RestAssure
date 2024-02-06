@@ -1,4 +1,4 @@
-package info.josealonso.usingRestAssured;
+package info.josealonso.usingRestAssured.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
