@@ -46,8 +46,6 @@ public class CourseControllerUnitTest {
     @Test
     public void givenNoExistingCoursesWhenGetCoursesThenResponseWithStatusOkAndEmptyArray() {
 
-        when(courseService.getAll()).thenReturn(Collections.emptySet());
-
         get("/courses").then()
                 .log().ifValidationFails()
                 .statusCode(HttpStatus.OK.value())
@@ -58,10 +56,6 @@ public class CourseControllerUnitTest {
     @Test
     public void givenNoMatchingCoursesWhenGetCoursesThenResponseWithStatusNotFound() {
         String nonMatchingCourseCode = "nonMatchingCourseCode";
-
-        when(courseService.getCourse(nonMatchingCourseCode)).thenThrow(
-                new CourseNotFoundException(nonMatchingCourseCode)
-        );
 
         get("/courses" + nonMatchingCourseCode)
                 .then()
