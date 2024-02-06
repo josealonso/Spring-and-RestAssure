@@ -4,27 +4,29 @@ import info.josealonso.usingRestAssured.Course;
 import info.josealonso.usingRestAssured.controller.CourseNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Set;
 
 @Service
 public class CourseService {
 
-    private static final Map<String, Course> COURSE_MAP = new ConcurrentHashMap<>();
+    private Set<Course> courseSet = new HashSet<>();
 
-    static {
-        var Maths = new Course("Maths");
-    }
-
-    public Collection<Course> getCourses() {
-        return COURSE_MAP.values();
+    public Set<Course> getAll() {
+        if (courseSet.isEmpty())
+            return Collections.emptySet();
+        else
+            return courseSet;
     }
 
     public Course getCourse(String code) {
-        return Optional.ofNullable(COURSE_MAP.get(code)).orElseThrow(
-                () -> new CourseNotFoundException(code)
+        return courseSet.stream()
+                        .filter(course -> course.code()
+                                .equals(code))
+                                .findFirst()
+                                .orElseThrow(() -> new CourseNotFoundException(code)
         );
     }
 }

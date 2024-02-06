@@ -3,20 +3,25 @@ package info.josealonso.usingRestAssured.controller;
 import info.josealonso.usingRestAssured.service.CourseService;
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import java.util.Collections;
 
-import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
+//import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
+import static io.restassured.RestAssured.get;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.OK;
 
+@ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CourseControllerUnitTest {
 
     @Mock
@@ -26,7 +31,7 @@ public class CourseControllerUnitTest {
     @InjectMocks
     private CourseControllerExceptionHandler courseControllerExceptionHandler;
 
-    @BeforeAll
+    @BeforeEach
     public void initialiseRestAssuredMockMvcStandalone() {
         RestAssuredMockMvc.standaloneSetup(courseController, courseControllerExceptionHandler);
     }
@@ -40,14 +45,12 @@ public class CourseControllerUnitTest {
 
     @Test
     public void givenNoExistingCoursesWhenGetCoursesThenResponseWithStatusOkAndEmptyArray() {
-        when(courseService.getCourses()).thenReturn(Collections.emptyList());
 
-        given()
-                .when()
-                .get("/courses")
-                .then()
+        when(courseService.getAll()).thenReturn(Collections.emptySet());
+
+        get("/courses").then()
                 .log().ifValidationFails()
-                .statusCode(OK.value())
+                .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
                 .body(is(equalTo("[]")));
     }
@@ -60,12 +63,10 @@ public class CourseControllerUnitTest {
                 new CourseNotFoundException(nonMatchingCourseCode)
         );
 
-        given()
-                .when()
-                .get("/courses" + nonMatchingCourseCode)
+        get("/courses" + nonMatchingCourseCode)
                 .then()
                 .log().ifValidationFails()
-                .statusCode(NOT_FOUND.value());
+                .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
 }
